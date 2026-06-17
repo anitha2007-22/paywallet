@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: paywallet-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: paywallet-db
+          property: connectionString
+
+databases:
+  - name: paywallet-db
+    databaseName: paywallet
+    user: paywallet_user
+    plan: free
