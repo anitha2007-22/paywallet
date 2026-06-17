@@ -51,10 +51,17 @@ io.on('connection', (socket) => {
 // ── MIDDLEWARE ────────────────────────────────────────────
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cors({
-  origin: [
-    'https://paywallet-z99d.vercel.app',
-    'http://localhost:3000',
-  ],
+  origin: function(origin, callback) {
+    const allowed = [
+      'https://paywallet-z99d.vercel.app',
+      'http://localhost:3000',
+    ];
+    if (!origin || allowed.some(o => origin.startsWith(o)) || origin.includes('vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
