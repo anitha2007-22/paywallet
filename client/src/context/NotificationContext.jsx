@@ -28,7 +28,7 @@ export const NotificationProvider = ({ children }) => {
     const token = localStorage.getItem('accessToken');
     if (!token) return;
 
-    const socket = io(import.meta.env.VITE_SOCKET_URL || '', {
+    const socket = io('https://paywallet-backend-skwj.onrender.com', {
       auth: { token },
       transports: ['websocket', 'polling'],
     });
